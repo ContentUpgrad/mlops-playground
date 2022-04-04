@@ -1,0 +1,53 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    k8s-app: kubernetes-dashboard
+  name: kubernetes-dashboard
+  namespace: kubernetes-dashboard
+spec:
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      k8s-app: kubernetes-dashboard
+  template:
+    metadata:
+      labels:
+        k8s-app: kubernetes-dashboard
+    spec:
+      containers:
+        - args:
+            - --namespace=kubernetes-dashboard
+            - --enable-insecure-login
+            - --enable-skip-login
+            - --disable-settings-authorizer
+          image: kubernetesui/dashboard:v2.2.0
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 9090
+            initialDelaySeconds: 30
+            timeoutSeconds: 30
+          name: kubernetes-dashboard
+          ports:
+            - containerPort: 9090
+              protocol: TCP
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            runAsGroup: 2001
+            runAsUser: 1001
+          volumeMounts:
+            - mountPath: /tmp
+              name: tmp-volume
+      nodeSelector:
+        kubernetes.io/os: linux
+      serviceAccountName: kubernetes-dashboard
+      tolerations:
+        - effect: NoSchedule
+          key: node-role.kubernetes.io/master
+      volumes:
+        - emptyDir: {}
+          name: tmp-volume
+

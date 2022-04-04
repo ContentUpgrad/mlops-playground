@@ -1,0 +1,41 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: syncresources
+  namespace: flyte
+spec:
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+            - command:
+                - flyteadmin
+                - --config
+                - /etc/flyte/config/*.yaml
+                - clusterresource
+                - sync
+              image: cr.flyte.org/flyteorg/flyteadmin:v0.6.104
+              imagePullPolicy: IfNotPresent
+              name: sync-cluster-resources
+              volumeMounts:
+                - mountPath: /etc/flyte/clusterresource/templates
+                  name: resource-templates
+                - mountPath: /etc/flyte/config
+                  name: config-volume
+                - mountPath: /etc/db
+                  name: db-pass
+          restartPolicy: OnFailure
+          serviceAccountName: flyteadmin
+          volumes:
+            - configMap:
+                name: clusterresource-template-dk5mbchdmt
+              name: resource-templates
+            - configMap:
+                name: flyte-admin-config-dbg8dt2dgb
+              name: config-volume
+            - name: db-pass
+              secret:
+                secretName: db-pass-9dgchhk2bm
+  schedule: '*/1 * * * *'
+

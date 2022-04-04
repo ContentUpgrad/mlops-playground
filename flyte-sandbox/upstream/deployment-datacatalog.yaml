@@ -1,0 +1,70 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: datacatalog
+  name: datacatalog
+  namespace: flyte
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: datacatalog
+  template:
+    metadata:
+      annotations:
+        prometheus.io/path: /metrics
+        prometheus.io/port: "10254"
+        prometheus.io/scrape: "true"
+      labels:
+        app: datacatalog
+        app.kubernetes.io/name: datacatalog
+        app.kubernetes.io/version: 0.3.0
+    spec:
+      containers:
+        - command:
+            - datacatalog
+            - --config
+            - /etc/datacatalog/config/*.yaml
+            - serve
+          image: cr.flyte.org/flyteorg/datacatalog:v0.3.23
+          imagePullPolicy: IfNotPresent
+          name: datacatalog
+          ports:
+            - containerPort: 8088
+            - containerPort: 8089
+          volumeMounts:
+            - mountPath: /etc/datacatalog/config
+              name: config-volume
+            - mountPath: /etc/db
+              name: db-pass
+      initContainers:
+        - command:
+            - datacatalog
+            - --config
+            - /etc/datacatalog/config/*.yaml
+            - migrate
+            - run
+          image: cr.flyte.org/flyteorg/datacatalog:v0.3.23
+          imagePullPolicy: IfNotPresent
+          name: run-migrations
+          volumeMounts:
+            - mountPath: /etc/datacatalog/config
+              name: config-volume
+            - mountPath: /etc/db
+              name: db-pass
+      securityContext:
+        fsGroup: 65534
+        fsGroupChangePolicy: Always
+        runAsUser: 1001
+      serviceAccountName: datacatalog
+      volumes:
+        - emptyDir: {}
+          name: shared-data
+        - configMap:
+            name: datacatalog-config-64k8dg9gck
+          name: config-volume
+        - name: db-pass
+          secret:
+            secretName: db-pass-9dgchhk2bm
+

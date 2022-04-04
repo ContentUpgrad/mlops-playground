@@ -1,0 +1,16 @@
+apiVersion: v1
+data:
+  aa_namespace.yaml: |
+    apiVersion: v1
+    kind: Namespace
+    metadata:
+      name: {{ namespace }}
+    spec:
+      finalizers:
+      - kubernetes
+  ab_project-resource-quota.yaml: "apiVersion: v1\nkind: ResourceQuota\nmetadata:\n  name: project-quota\n  namespace: {{ namespace }} \nspec:\n  hard:\n    limits.cpu: {{ projectQuotaCpu }} \n    limits.memory: {{ projectQuotaMemory }}\n\n"
+kind: ConfigMap
+metadata:
+  name: clusterresource-template-dk5mbchdmt
+  namespace: flyte
+

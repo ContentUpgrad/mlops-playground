@@ -1,0 +1,37 @@
+apiVersion: v1
+data:
+  db.yaml: |
+    database:
+      port: 5432
+      username: postgres
+      host: postgres
+      dbname: datacatalog
+      options: sslmode=disable
+  logger.yaml: |
+    logger:
+      show-source: true
+      level: 2
+  server.yaml: |
+    datacatalog:
+      storage-prefix: metadata/datacatalog
+      metrics-scope: "datacatalog"
+      profiler-port: 10254
+    application:
+      grpcPort: 8089
+  storage.yaml: |+
+    storage:
+      type: minio
+      connection:
+        access-key: minio
+        auth-type: accesskey
+        secret-key: miniostorage
+        disable-ssl: true
+        endpoint: http://minio.flyte.svc.cluster.local:9000
+        region: us-east-1
+      container: "my-s3-bucket"
+
+kind: ConfigMap
+metadata:
+  name: datacatalog-config-64k8dg9gck
+  namespace: flyte
+

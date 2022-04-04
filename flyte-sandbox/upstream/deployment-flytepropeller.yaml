@@ -1,0 +1,56 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: flytepropeller
+  name: flytepropeller
+  namespace: flyte
+spec:
+  selector:
+    matchLabels:
+      app: flytepropeller
+  template:
+    metadata:
+      annotations:
+        prometheus.io/path: /metrics
+        prometheus.io/port: "10254"
+        prometheus.io/scrape: "true"
+      labels:
+        app: flytepropeller
+        app.kubernetes.io/name: flytepropeller
+        app.kubernetes.io/version: 0.7.1
+    spec:
+      containers:
+        - args:
+            - --config
+            - /etc/flyte/config/*.yaml
+          command:
+            - flytepropeller
+          env:
+            - name: POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+          image: cr.flyte.org/flyteorg/flytepropeller:v0.16.29
+          imagePullPolicy: IfNotPresent
+          name: flytepropeller
+          ports:
+            - containerPort: 10254
+          volumeMounts:
+            - mountPath: /etc/flyte/config
+              name: config-volume
+            - mountPath: /etc/secrets/
+              name: auth
+      securityContext:
+        fsGroup: 65534
+        fsGroupChangePolicy: Always
+        runAsUser: 1001
+      serviceAccountName: flytepropeller
+      volumes:
+        - configMap:
+            name: flyte-propeller-config-g52db28fmc
+          name: config-volume
+        - name: auth
+          secret:
+            secretName: flyte-secret-auth
+
