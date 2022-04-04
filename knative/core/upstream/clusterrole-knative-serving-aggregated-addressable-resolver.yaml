@@ -1,0 +1,16 @@
+# Use this aggregated ClusterRole when you need readonly access to "Addressables"
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  # Named like this to avoid clashing with eventing's existing `addressable-resolver` role
+  # (which should be identical, but isn't guaranteed to be installed alongside serving).
+  name: knative-serving-aggregated-addressable-resolver
+  labels:
+    serving.knative.dev/release: "v1.3.0"
+    app.kubernetes.io/version: "1.3.0"
+    app.kubernetes.io/name: knative-serving
+aggregationRule:
+  clusterRoleSelectors:
+    - matchLabels:
+        duck.knative.dev/addressable: "true"
+

@@ -1,0 +1,17 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+- clusterrole-knative-serving-istio.yaml
+- configmap-config-istio.yaml
+- deployment-net-istio-controller.yaml
+- deployment-net-istio-webhook.yaml
+- gateway-knative-ingress-gateway.yaml
+- gateway-knative-local-gateway.yaml
+- mutatingwebhookconfiguration-webhook.istio.networking.internal.knative.dev.yaml
+- peerauthentication-domainmapping-webhook.yaml
+- peerauthentication-net-istio-webhook.yaml
+- peerauthentication-webhook.yaml
+- secret-net-istio-webhook-certs.yaml
+- service-knative-local-gateway.yaml
+- service-net-istio-webhook.yaml
+- validatingwebhookconfiguration-config.webhook.istio.networking.internal.knative.dev.yaml

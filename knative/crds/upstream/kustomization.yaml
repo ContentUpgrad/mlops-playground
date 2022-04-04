@@ -1,0 +1,15 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+- customresourcedefinition-certificates.networking.internal.knative.dev.yaml
+- customresourcedefinition-clusterdomainclaims.networking.internal.knative.dev.yaml
+- customresourcedefinition-configurations.serving.knative.dev.yaml
+- customresourcedefinition-domainmappings.serving.knative.dev.yaml
+- customresourcedefinition-images.caching.internal.knative.dev.yaml
+- customresourcedefinition-ingresses.networking.internal.knative.dev.yaml
+- customresourcedefinition-metrics.autoscaling.internal.knative.dev.yaml
+- customresourcedefinition-podautoscalers.autoscaling.internal.knative.dev.yaml
+- customresourcedefinition-revisions.serving.knative.dev.yaml
+- customresourcedefinition-routes.serving.knative.dev.yaml
+- customresourcedefinition-serverlessservices.networking.internal.knative.dev.yaml
+- customresourcedefinition-services.serving.knative.dev.yaml
