@@ -1,0 +1,27 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+- certificate-serving-cert.yaml
+- clusterrole-kserve-manager-role.yaml
+- clusterrole-kserve-proxy-role.yaml
+- clusterrolebinding-kserve-manager-rolebinding.yaml
+- clusterrolebinding-kserve-proxy-rolebinding.yaml
+- configmap-inferenceservice-config.yaml
+- configmap-kserve-config.yaml
+- customresourcedefinition-clusterservingruntimes.serving.kserve.io.yaml
+- customresourcedefinition-inferenceservices.serving.kserve.io.yaml
+- customresourcedefinition-servingruntimes.serving.kserve.io.yaml
+- customresourcedefinition-trainedmodels.serving.kserve.io.yaml
+- issuer-selfsigned-issuer.yaml
+- mutatingwebhookconfiguration-inferenceservice.serving.kserve.io.yaml
+- namespace-kserve.yaml
+- role-leader-election-role.yaml
+- rolebinding-leader-election-rolebinding.yaml
+- secret-kserve-webhook-server-secret.yaml
+- service-kserve-controller-manager-metrics-service.yaml
+- service-kserve-controller-manager-service.yaml
+- service-kserve-webhook-server-service.yaml
+- serviceaccount-kserve-controller-manager.yaml
+- statefulset-kserve-controller-manager.yaml
+- validatingwebhookconfiguration-inferenceservice.serving.kserve.io.yaml
+- validatingwebhookconfiguration-trainedmodel.serving.kserve.io.yaml
