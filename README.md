@@ -28,7 +28,7 @@ The `Makefile` includes some utility functions to help you get going:
 The below command will set up a local kind cluster for you together with argocd for gitops:
 
 ```bash
-make bootstrap
+make startup
 ```
 
 In order to kill the cluster and cleanup resources you may use:
