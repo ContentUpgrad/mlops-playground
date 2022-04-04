@@ -1,0 +1,22 @@
+# Source: feast/charts/transformation-service/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: feast-0.19.3-transformation-service
+  namespace: feast
+  labels:
+    app: transformation-service
+    chart: transformation-service-0.19.3
+    release: feast-0.19.3
+    heritage: Helm
+spec:
+  type: ClusterIP
+  ports:
+    - name: grpc
+      port: 6566
+      targetPort: 6566
+  selector:
+    app: transformation-service
+    component: serving
+    release: feast-0.19.3
+

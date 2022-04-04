@@ -1,0 +1,25 @@
+# Source: feast/charts/feature-server/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: feast-0.19.3-feature-server
+  namespace: feast
+  labels:
+    app: feature-server
+    chart: feature-server-0.19.3
+    release: feast-0.19.3
+    heritage: Helm
+spec:
+  type: ClusterIP
+  ports:
+    - name: http
+      port: 80
+      targetPort: 8080
+    - name: grpc
+      port: 6566
+      targetPort: 6566
+  selector:
+    app: feature-server
+    component: serving
+    release: feast-0.19.3
+

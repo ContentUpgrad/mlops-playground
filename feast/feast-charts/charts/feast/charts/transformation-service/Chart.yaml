@@ -1,0 +1,10 @@
+apiVersion: v1
+appVersion: v0.19.3
+description: 'Transformation service: to compute on-demand features'
+home: https://github.com/feast-dev/feast
+keywords:
+- machine learning
+- big data
+- mlops
+name: transformation-service
+version: 0.19.3

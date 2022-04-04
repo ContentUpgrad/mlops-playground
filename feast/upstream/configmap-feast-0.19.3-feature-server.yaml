@@ -1,0 +1,16 @@
+# Source: feast/charts/feature-server/templates/configmap.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: feast-0.19.3-feature-server
+  namespace: feast
+  labels:
+    app: feature-server
+    component: serving
+    chart: feature-server-0.19.3
+    release: feast-0.19.3
+    heritage: Helm
+data:
+  application-generated.yaml: "feast:\n  registry: gs://path/to/registry.db\n  registryRefreshInterval: 0\n  transformationServiceEndpoint: feast-0.19.3-transformation-service:6566\n  \n  activeStore: online\n  stores:\n  - name: online\n    type: REDIS \n    config:\n      host: feast-0.19.3-redis-master\n      port: 6379\nrest:\n  server: \n    port: 8080\ngrpc:\n  server:\n    port: 6566\n"
+  application-override.yaml: ""
+

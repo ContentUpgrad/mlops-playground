@@ -1,0 +1,40 @@
+# Source: feast/charts/transformation-service/templates/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: feast-0.19.3-transformation-service
+  namespace: feast
+  labels:
+    app: transformation-service
+    component: serving
+    chart: transformation-service-0.19.3
+    release: feast-0.19.3
+    heritage: Helm
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: transformation-service
+      component: serving
+      release: feast-0.19.3
+  template:
+    metadata:
+      labels:
+        app: transformation-service
+        component: serving
+        release: feast-0.19.3
+    spec:
+      containers:
+        - name: transformation-service
+          image: feastdev/feature-transformation-server:0.19.3
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: grpc
+              containerPort: 6566
+          env:
+            - name: FEATURE_TRANSFORMATION_SERVER_PORT
+              value: "6566"
+            - name: FEATURE_STORE_YAML_BASE64
+              value: "cmVnaXN0cnk6CiAgcGF0aDogZ3M6Ly9wYXRoL3RvL3JlZ2lzdHJ5LmRiCiAgY2FjaGVfdHRsX3NlY29uZHM6IDAKcHJvdmlkZXI6IGxvY2FsCnByb2plY3Q6IGRlZmF1bHQKZmxhZ3M6CiAgb25fZGVtYW5kX3RyYW5zZm9ybXM6IHRydWUKICBhbHBoYV9mZWF0dXJlczogdHJ1ZQ=="
+          resources: {}
+

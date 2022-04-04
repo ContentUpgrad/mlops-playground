@@ -1,0 +1,8 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+helmCharts:
+- name: feast
+  repo: https://feast-helm-charts.storage.googleapis.com
+  version: 0.19.3
+  releaseName: feast-0.19.3
+  namespace: feast

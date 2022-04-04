@@ -1,0 +1,87 @@
+# Source: feast/charts/feature-server/templates/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: feast-0.19.3-feature-server
+  namespace: feast
+  labels:
+    app: feature-server
+    component: serving
+    chart: feature-server-0.19.3
+    release: feast-0.19.3
+    heritage: Helm
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: feature-server
+      component: serving
+      release: feast-0.19.3
+  template:
+    metadata:
+      annotations:
+        checksum/configmap: 97459c039f70fdbb277b131e40ffe39a335c4b34c20bfb3a7723bbced7824db2
+        checksum/secret: 0b877aacb998d6cdf6bc9fff364b8e176e52545eb9b6609cfeaff74b4e6295ad
+      labels:
+        app: feature-server
+        component: serving
+        release: feast-0.19.3
+    spec:
+      volumes:
+        - name: feast-0.19.3-feature-server-config
+          configMap:
+            name: feast-0.19.3-feature-server
+        - name: feast-0.19.3-feature-server-secret
+          secret:
+            secretName: feast-0.19.3-feature-server
+      containers:
+        - name: feature-server
+          image: feastdev/feature-server-java:0.19.3
+          imagePullPolicy: IfNotPresent
+          volumeMounts:
+            - name: feast-0.19.3-feature-server-config
+              mountPath: /etc/feast
+            - name: feast-0.19.3-feature-server-secret
+              mountPath: /etc/secrets/feast
+              readOnly: true
+          env:
+            - name: LOG_TYPE
+              value: "Console"
+            - name: LOG_LEVEL
+              value: "WARN"
+          command:
+            - java
+            - -jar
+            - /opt/feast/feast-serving.jar
+            - classpath:/application.yml,file:/etc/feast/application-generated.yaml,file:/etc/feast/application-override.yaml
+          ports:
+            - name: http
+              containerPort: 8080
+            - name: grpc
+              containerPort: 6566
+          livenessProbe:
+            exec:
+              command:
+                - "grpc-health-probe"
+                - "-addr=:6566"
+                - "-connect-timeout=5s"
+                - "-rpc-timeout=5s"
+            initialDelaySeconds: 60
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 5
+            failureThreshold: 5
+          readinessProbe:
+            exec:
+              command:
+                - "grpc-health-probe"
+                - "-addr=:6566"
+                - "-connect-timeout=10s"
+                - "-rpc-timeout=10s"
+            initialDelaySeconds: 15
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 10
+            failureThreshold: 5
+          resources: {}
+
