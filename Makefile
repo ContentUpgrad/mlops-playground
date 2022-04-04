@@ -22,8 +22,16 @@ pull_upstream:
 	./hack/pull_upstream.sh
 
 
+.PHONY: mlops
+## Deploy mlops tools
+mlops:
+	@echo "+ $@"
+	sleep 20
+	./hack/deploy_mlops.sh
+
+
 .PHONY: argocd
-## Expose argo-ui on localhost:8080
+## Install argocd
 argocd:
 	@echo "+ $@"
 	sleep 20
