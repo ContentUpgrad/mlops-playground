@@ -41,7 +41,7 @@ make teardown
 
 ## Argocd Applications
 
-The [argocd](./argocd) folder contains code ArgoCD application manifests. In order to start syncing an application; run `kubectl -n argocd -f ./argocd/<application name>`
+The [argocd](./argocd) folder contains code ArgoCD application manifests. In order to start syncing an application; run `kubectl apply -f ./argocd/applications/<application name>` kubectl -n argocd -f ./argocd/
 
 Available applications:
 
@@ -50,7 +50,7 @@ Available applications:
 - [feast](argocd/applications/feast.yaml)
 - [flyte](argocd/applications/flyte.yaml)
 
-The `argo-ui` is by default reachable by `port-forwarding`. A utility function `make argo-ui` will get you there.
+The `argo-ui` is by default reachable at `https://argocd.127.0.0.1.nip.io`. with the default admin user `admin` and the password can be retrieved by:
 
 ```bash
 kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d
