@@ -37,7 +37,6 @@ resources:
 - deployment-kubernetes-dashboard.yaml
 - deployment-minio.yaml
 - deployment-postgres.yaml
-- flyte_sandbox_manifest
 - ingress-flytesystem.yaml
 - ingress-minio.yaml
 - job-contour-certgen-v1.13.1.yaml
