@@ -1,6 +1,6 @@
 # MLOps Sandbox
 
-> Contains setup for k8s native MLOps tools
+> The repository contains a local k8s kind setup with argocd and MLOps tools. This is aimed for local development and testing of different services.
 
 
 The below guide assumes that you have `docker`, `kubectl`, `kind` & `kustomize` preinstalled on your system.
@@ -39,19 +39,26 @@ make teardown
 
 > **NOTE**: IF you are on Monterey you might have to turn of Preferences>Sharing>Airplay receiver. Alternatively, change the port for the local registry.
 
-## Argocd Applications
+## Argocd
 
-The [argocd](./argocd) folder contains code ArgoCD application manifests. In order to start syncing an application; run `kubectl apply -f ./argocd/applications/<application name>` kubectl -n argocd -f ./argocd/
 
-Available applications:
-
-- [knative](./argocd/applications/knative.yaml)
-- [kserve](argocd/applications/kserve.yaml)
-- [feast](argocd/applications/feast.yaml)
-- [flyte](argocd/applications/flyte.yaml)
+You can install [argocd](./kind/argocd.sh) in the kind cluster by `bash ./kind/argocd.sh` or `make argocd`.
 
 The `argo-ui` is by default reachable at `https://argocd.127.0.0.1.nip.io`. with the default admin user `admin` and the password can be retrieved by:
 
 ```bash
 kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d
 ```
+
+> The secret will also be printed by the bash script
+
+The [argocd](./argocd/applications) folder contains code ArgoCD application manifests. In order to start syncing an application; run `kubectl apply -f ./argocd/applications/<application name>`.
+
+**Available applications:**
+
+- [knative](./argocd/applications/knative.yaml)
+- [kserve](argocd/applications/kserve.yaml)
+- [feast](argocd/applications/feast.yaml)
+- [flyte](argocd/applications/flyte.yaml)
+
+> You can also use `make mlops` which will install the mlops-tools via [deploy_mlops.sh](./hack/deploy_mlops.sh). Feel free to combine the services according to your needs.
