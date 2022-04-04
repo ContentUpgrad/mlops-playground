@@ -8,7 +8,7 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: https://github.com/aukeaai/mlops-sandbox
+    repoURL: https://github.com/aukeaai/mlops-playground.git
     targetRevision: master
     path: kserve/upstream
   destination:

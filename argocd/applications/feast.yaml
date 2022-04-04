@@ -8,8 +8,8 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: https://github.com/aukeaai/mlops-sandbox
-    targetRevision: master
+    repoURL: https://github.com/aukeaai/mlops-playground.git
+    targetRevision: HEAD
     path: feast
   destination:
     server: https://kubernetes.default.svc
