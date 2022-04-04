@@ -1,11 +1,11 @@
 .PHONY: startup
-startup: bootstrap
+startup: bootstrap argocd
 
 .PHONY: bootstrap
 ## Bootstrap a local single node kind cluster with argocd
 bootstrap:
 	@echo "+ $@"
-	./kind/setup.sh
+	./kind/cluster.sh
 
 .PHONY: teardown
 ## Teardown local kind cluster
@@ -22,11 +22,11 @@ pull_upstream:
 	./hack/pull_upstream.sh
 
 
-.PHONY: argo-ui
+.PHONY: argocd
 ## Expose argo-ui on localhost:8080
-argo-ui:
+argocd:
 	@echo "+ $@"
-	kubectl port-forward service/argocd-server -n argocd 8080:443
+	./kind/argocd.sh
 
 
 
