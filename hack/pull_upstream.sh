@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# Requires kubectl-slice & yq, helm3
+# Requires kubectl-slice & yq, helm3, kpt
 
 set -euo pipefail
 
@@ -75,6 +75,9 @@ pull_helm_manifests(){
 readonly FLYTE_VERSION="v0.19.3-b3"
 readonly FLYTE_REPO="flyteorg/flyte"
 readonly FLYTE_MANIFEST="flyte_sandbox_manifest"
+# Kubeflow pipelines
+readonly KPIPELINES_VERSION="1.8.1"
+readonly KPIPELINES_REPO="https://github.com/kubeflow/pipelines.git"
 # Feast
 readonly FEAST_VERSION="0.19.3"
 readonly FEAST_URL="https://feast-helm-charts.storage.googleapis.com"
@@ -100,3 +103,6 @@ pull_release_manifests "knative/crds" $KNATIVE_SERVING_REPO $KNATIVE_SERVING_VER
 pull_release_manifests "knative/net-istio" $KNATIVE_NET_ISTIO_REPO $KNATIVE_SERVING_VERSION "release"
 pull_release_manifests "kserve" $KSERVE_REPO $KSERVE_VERSION "kserve"
 pull_release_manifests "prometheus-operator" $PROM_REPO $PROM_VERSION "bundle"
+
+
+kpt pkg get "${KPIPELINES_REPO}/manifests/kustomize@${KPIPELINES_VERSION}" ./kubeflow/pipelines/upstream/
