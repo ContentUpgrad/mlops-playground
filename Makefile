@@ -26,7 +26,6 @@ pull_upstream:
 ## Deploy mlops tools
 mlops:
 	@echo "+ $@"
-	sleep 20
 	./hack/deploy_mlops.sh
 
 
