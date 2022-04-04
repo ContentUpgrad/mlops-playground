@@ -9,7 +9,7 @@ spec:
   project: default
   source:
     repoURL: https://github.com/aukeaai/mlops-playground.git
-    targetRevision: master
+    targetRevision: HEAD
     path: flyte-sandbox/upstream
   destination:
     server: https://kubernetes.default.svc
