@@ -56,6 +56,8 @@ The [argocd](./argocd/applications) folder contains code ArgoCD application mani
 
 **Available applications:**
 
+
+- [prometheus-operator](./argocd/applications/prometheus-operator.yaml)
 - [knative](./argocd/applications/knative.yaml)
 - [kserve](argocd/applications/kserve.yaml)
 - [feast](argocd/applications/feast.yaml)

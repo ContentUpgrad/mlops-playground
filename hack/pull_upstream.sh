@@ -87,6 +87,11 @@ readonly KNATIVE_NET_ISTIO_REPO="knative/net-istio"
 # Kserve
 readonly KSERVE_VERSION="v0.8.0"
 readonly KSERVE_REPO="kserve/kserve"
+# Prometheus
+readonly PROM_VERSION="v0.55.1"
+readonly PROM_REPO="prometheus-operator/prometheus-operator"
+readonly PROM_MANIFEST="bundle"
+
 
 pull_release_manifests "flyte-sandbox" $FLYTE_REPO $FLYTE_VERSION $FLYTE_MANIFEST
 pull_helm_manifests $FEAST_CHART $FEAST_REPO $FEAST_URL $FEAST_VERSION
@@ -94,3 +99,4 @@ pull_release_manifests "knative/core" $KNATIVE_SERVING_REPO $KNATIVE_SERVING_VER
 pull_release_manifests "knative/crds" $KNATIVE_SERVING_REPO $KNATIVE_SERVING_VERSION "serving-crds"
 pull_release_manifests "knative/net-istio" $KNATIVE_NET_ISTIO_REPO $KNATIVE_SERVING_VERSION "release"
 pull_release_manifests "kserve" $KSERVE_REPO $KSERVE_VERSION "kserve"
+pull_release_manifests "prometheus-operator" $PROM_REPO $PROM_VERSION "bundle"
