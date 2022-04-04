@@ -26,6 +26,7 @@ pull_upstream:
 ## Expose argo-ui on localhost:8080
 argocd:
 	@echo "+ $@"
+	sleep 20
 	./kind/argocd.sh
 
 
