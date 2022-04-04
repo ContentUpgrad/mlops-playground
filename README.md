@@ -9,7 +9,7 @@ The below guide assumes that you have `docker`, `kubectl`, `kind` & `kustomize` 
 If you are on a MacOS this is as easy as:
 
 ```bash
-brew install docker kubectl kind kustomize dnsmasq
+brew install docker kubectl kind kustomize
 ```
 
 Furthermore, if you are planning to develop and run the services locally you will need to increase the default resources for Docker:
@@ -55,7 +55,6 @@ kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.pas
 The [argocd](./argocd/applications) folder contains code ArgoCD application manifests. In order to start syncing an application; run `kubectl apply -f ./argocd/applications/<application name>`.
 
 **Available applications:**
-
 
 - [prometheus-operator](./argocd/applications/prometheus-operator.yaml)
 - [knative](./argocd/applications/knative.yaml)
