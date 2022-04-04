@@ -12,9 +12,13 @@ spec:
     http:
       paths:
       - backend:
-          serviceName: ml-pipeline-ui
-          servicePort: https
-    tls:
-      - secretName: pipeline-ui.127.0.0.1.nip.io
-        hosts:
-          - pipeline-ui.127.0.0.1.nip.io
+          service:
+            name: ml-pipeline-ui
+            port:
+              name: https
+          path: /
+          pathType: Prefix
+  tls:
+    - secretName: pipeline-ui.127.0.0.1.nip.io
+      hosts:
+        - pipeline-ui.127.0.0.1.nip.io
