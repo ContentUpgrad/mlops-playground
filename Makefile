@@ -5,13 +5,13 @@ startup: bootstrap argocd
 ## Bootstrap a local single node kind cluster with argocd
 bootstrap:
 	@echo "+ $@"
-	.cluster/kind/cluster.sh
+	./cluster/kind/cluster.sh
 
 .PHONY: teardown
 ## Teardown local kind cluster
 teardown:
 	@echo "+ $@"
-	.cluster/kind/teardown.sh
+	./cluster/kind/teardown.sh
 
 
 .PHONY: pull_upstream
@@ -34,7 +34,7 @@ mlops:
 argocd:
 	@echo "+ $@"
 	sleep 20
-	.cluster/kind/argocd.sh
+	./cluster/kind/argocd.sh
 
 
 
