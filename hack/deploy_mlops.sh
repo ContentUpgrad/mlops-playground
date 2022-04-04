@@ -12,7 +12,8 @@ deploy(){
 }
 
 deploy feast
-deploy flyte
+#deploy flyte
+deploy kubeflow-pipelines
 deploy knative-serving-core
 deploy knative-serving-crds
 # deploy knative-serving-net-istio
