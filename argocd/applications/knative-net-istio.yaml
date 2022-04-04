@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: knative-serving
+  name: knative-net-istio
   namespace: argocd
   finalizers:
     - resources-finalizer.argocd.argoproj.io
@@ -10,7 +10,7 @@ spec:
   source:
     repoURL: https://github.com/aukeaai/mlops-playground.git
     targetRevision: HEAD
-    path: knative
+    path: knative/net-istio/upstream
   destination:
     server: https://kubernetes.default.svc
     namespace: knative-serving

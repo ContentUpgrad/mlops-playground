@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: feast
+  name: knative-serving-core
   namespace: argocd
   finalizers:
     - resources-finalizer.argocd.argoproj.io
@@ -10,10 +10,10 @@ spec:
   source:
     repoURL: https://github.com/aukeaai/mlops-playground.git
     targetRevision: HEAD
-    path: feast
+    path: knative/core/upstream
   destination:
     server: https://kubernetes.default.svc
-    namespace: feast
+    namespace: knative-serving
   syncPolicy:
     syncOptions:
       - CreateNamespace=true
