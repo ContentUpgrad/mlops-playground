@@ -22,7 +22,7 @@ subnet_to_ip(){
 }
 
 root_ca(){
-  log "ROOT CERTIFICATE ..."
+  log "Create root certificate"
 
   mkdir -p .ssl
 
@@ -37,7 +37,7 @@ root_ca(){
 }
 
 install_ca_mac(){
-  log "INSTALL CERTIFICATE AUTHORITY ..."
+  log "Install certificate authority"
 
   sudo security add-trusted-cert -d -r trustRoot -k /Library/Keychains/System.keychain .ssl/root-ca.pem
 
@@ -58,7 +58,7 @@ proxy(){
 }
 
 proxies(){
-  log "REGISTRY PROXIES ..."
+  log "Setup registry proxies"
 
   proxy proxy-docker-hub https://registry-1.docker.io
   proxy proxy-quay       https://quay.io
@@ -174,7 +174,7 @@ EOF
 
 
 cert_manager(){
-  log "CERT MANAGER ..."
+  log "Install cert-manager"
 
   helm upgrade --install --wait --timeout 15m --atomic --namespace cert-manager --create-namespace \
     --repo https://charts.jetstack.io cert-manager cert-manager --values - <<EOF
@@ -184,7 +184,7 @@ EOF
 
 
 root_ca(){
-  log "ROOT CERTIFICATE ..."
+  log "Create root certificate"
 
   mkdir -p .ssl
 
