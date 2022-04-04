@@ -13,7 +13,7 @@ spec:
     path: knative
   destination:
     server: https://kubernetes.default.svc
-    namespace: flyte
+    namespace: knative-serving
   syncPolicy:
     syncOptions:
       - CreateNamespace=true
