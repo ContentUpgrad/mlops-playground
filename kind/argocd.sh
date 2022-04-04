@@ -52,7 +52,7 @@ server:
   ingress:
     annotations:
       kubernetes.io/ingress.class: nginx
-      cert-manager.io/cluster-issuer: selfsigned-issuer
+      cert-manager.io/cluster-issuer: ca-issuer
     enabled: true
     hosts:
       - argocd.$DOMAIN

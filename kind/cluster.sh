@@ -44,6 +44,28 @@ install_ca_mac(){
 }
 
 
+proxy(){
+  local NAME=$1
+  local TARGET=$2
+
+  if [ -z $(docker ps --filter name=^proxy-gcr$ --format="{{ .Names }}") ]
+  then
+    docker run -d --name $NAME --restart=always --net=kind -e REGISTRY_PROXY_REMOTEURL=$TARGET registry:2
+    echo "Proxy $NAME (-> $TARGET) created"
+  else
+    echo "Proxy $NAME already exists, skipping"
+  fi
+}
+
+proxies(){
+  log "REGISTRY PROXIES ..."
+
+  proxy proxy-docker-hub https://registry-1.docker.io
+  proxy proxy-quay       https://quay.io
+  proxy proxy-gcr        https://gcr.io
+  proxy proxy-k8s-gcr    https://k8s.gcr.io
+}
+
 
 cilium(){
     log "Install cilium CNI"
@@ -72,6 +94,7 @@ hubble:
     ingress:
       enabled: true
       annotations:
+        cert-manager.io/cluster-issuer: ca-issuer
         kubernetes.io/ingress.class: nginx
       hosts:
         - hubble-ui.127.0.0.1.nip.io
@@ -86,6 +109,29 @@ apiVersion: kind.x-k8s.io/v1alpha4
 networking:
   disableDefaultCNI: true
   kubeProxyMode: none
+kubeadmConfigPatches:
+  - |-
+    kind: ClusterConfiguration
+    apiServer:
+      extraVolumes:
+        - name: opt-ca-certificates
+          hostPath: /opt/ca-certificates/root-ca.pem
+          mountPath: /opt/ca-certificates/root-ca.pem
+          readOnly: true
+          pathType: File
+containerdConfigPatches:
+  - |-
+    [plugins."io.containerd.grpc.v1.cri".registry.mirrors."docker.io"]
+      endpoint = ["http://proxy-docker-hub:5000"]
+  - |-
+    [plugins."io.containerd.grpc.v1.cri".registry.mirrors."quay.io"]
+      endpoint = ["http://proxy-quay:5000"]
+  - |-
+    [plugins."io.containerd.grpc.v1.cri".registry.mirrors."k8s.gcr.io"]
+      endpoint = ["http://proxy-k8s-gcr:5000"]
+  - |-
+    [plugins."io.containerd.grpc.v1.cri".registry.mirrors."gcr.io"]
+      endpoint = ["http://proxy-gcr:5000"]
 nodes:
 - role: control-plane
   kubeadmConfigPatches:
@@ -95,17 +141,34 @@ nodes:
       kubeletExtraArgs:
         node-labels: "ingress-ready=true"
   extraPortMappings:
-  - containerPort: 80
-    hostPort: 80
-    listenAddress: 127.0.0.1
-    protocol: TCP
-  - containerPort: 443
-    hostPort: 443
-    listenAddress: 127.0.0.1
-    protocol: TCP
+    - containerPort: 80
+      hostPort: 80
+      listenAddress: 127.0.0.1
+      protocol: TCP
+    - containerPort: 443
+      hostPort: 443
+      listenAddress: 127.0.0.1
+      protocol: TCP
+  extraMounts:
+  - hostPath: $PWD/.ssl/root-ca.pem
+    containerPath: /opt/ca-certificates/root-ca.pem
+    readOnly: true
 - role: worker
+  extraMounts:
+    - hostPath: $PWD/.ssl/root-ca.pem
+      containerPath: /opt/ca-certificates/root-ca.pem
+      readOnly: true
 - role: worker
+  extraMounts:
+    - hostPath: $PWD/.ssl/root-ca.pem
+      containerPath: /opt/ca-certificates/root-ca.pem
+      readOnly: true
 - role: worker
+  extraMounts:
+    - hostPath: $PWD/.ssl/root-ca.pem
+      containerPath: /opt/ca-certificates/root-ca.pem
+      readOnly: true
+
 EOF
 }
 
@@ -119,14 +182,44 @@ installCRDs: true
 EOF
 }
 
+
+root_ca(){
+  log "ROOT CERTIFICATE ..."
+
+  mkdir -p .ssl
+
+  if [[ -f ".ssl/root-ca.pem" && -f ".ssl/root-ca-key.pem" ]]
+  then
+    echo "Root certificate already exists, skipping"
+  else
+    openssl genrsa -out .ssl/root-ca-key.pem 2048
+    openssl req -x509 -new -nodes -key .ssl/root-ca-key.pem -days 3650 -sha256 -out .ssl/root-ca.pem -subj "/CN=kube-ca"
+    echo "Root certificate created"
+  fi
+}
+
+install_ca_mac(){
+  log "INSTALL CERTIFICATE AUTHORITY ..."
+
+  sudo security add-trusted-cert -d -r trustRoot -k /Library/Keychains/System.keychain .ssl/root-ca.pem
+
+}
+
+
+cert_manager_ca_secret(){
+  kubectl delete secret -n cert-manager root-ca || true
+  kubectl create secret tls -n cert-manager root-ca --cert=.ssl/root-ca.pem --key=.ssl/root-ca-key.pem
+}
+
 cert_manager_ca_issuer(){
   kubectl apply -n cert-manager -f - <<EOF
 apiVersion: cert-manager.io/v1
 kind: ClusterIssuer
 metadata:
-  name: selfsigned-issuer
+  name: ca-issuer
 spec:
-  selfSigned: {}
+  ca:
+    secretName: root-ca
 EOF
 }
 
@@ -149,8 +242,12 @@ argocd(){
 }
 
 
+proxies
+root_ca
+install_ca_mac
 cluster
 cilium
 cert_manager
+cert_manager_ca_secret
 cert_manager_ca_issuer
 ngnix_ingress
