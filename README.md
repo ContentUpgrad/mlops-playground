@@ -1,15 +1,19 @@
-# MLOps Sandbox
+# MLOps Playground
 
-> The repository contains a local k8s kind setup with argocd and MLOps tools. This is aimed for local development and testing of different services.
+> The repository contains a playground for OSS cloud-native MLOps tools. Furthermore, it has bootstrap scripts to set up cluster environments locally with `kind` and in the cloud (`gke`).
 
+The [bootstraps](./cluster) contains a lightweight k8s cluster together with `argocd` to enable gitops. In addtion to some popular services that usually come along with a k8s installation eg, prometheus & grafana.
 
-The below guide assumes that you have `docker`, `kubectl`, `kind` & `kustomize` preinstalled on your system.
+The goal is to provide a playground, where you can combine services into a `stack` and try them out locally, or on some popular cloud provider.
 
+> We make heavy use of `kustomize` and we are working on overlay configuration for each cluster.
+
+In order to get going you will need `docker`, `kubectl`, `kind`, `kpt` &  `kustomize` installed.
 
 If you are on a MacOS this is as easy as:
 
 ```bash
-brew install docker kubectl kind kustomize
+brew install docker kubectl kind kustomize kpt
 ```
 
 Furthermore, if you are planning to develop and run the services locally you will need to increase the default resources for Docker:
@@ -108,6 +112,4 @@ Run the following command to retrieve the access credentials for your cluster an
 
 ```bash
 gcloud container clusters get-credentials $(terraform output -raw kubernetes_cluster_name) --region $(terraform output -raw region)
-Fetching cluster endpoint and auth data.
-kubeconfig entry generated for dos-terraform-edu-gke.
 ```
