@@ -71,6 +71,7 @@ The [argocd](./argocd/applications) folder contains code ArgoCD application mani
 - [knative-serving](./argocd/applications/knative-serving-core.yaml)
 - [kserve](argocd/applications/kserve.yaml)
 - [feast](argocd/applications/feast.yaml)
+- [kubeflow pipelines](argocd/applications/kubeflow-pipelines.yaml)
 - [flyte](argocd/applications/flyte.yaml)
 
 > You can also use `make mlops` which will install the mlops-tools via [deploy_mlops.sh](./hack/deploy_mlops.sh). Feel free to combine the services according to your needs.
