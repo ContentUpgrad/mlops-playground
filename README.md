@@ -1,6 +1,6 @@
-# MLOps Playground
+# MLOps Playground 🕹️
 
-> The repository contains a playground for OSS cloud-native MLOps tools. Furthermore, it has bootstrap scripts to set up cluster environments locally with `kind` and in the cloud (`gke`).
+> The repository contains a playground for OSS cloud-native MLOps tools. Furthermore, it has bootstrap scripts to set up cluster environments locally with `kind` and in the cloud (`gke`). **Currently, the content is highly a work in progress**
 
 The [bootstraps](./cluster) contains a lightweight k8s cluster together with `argocd` to enable gitops. In addtion to some popular services that usually come along with a k8s installation eg, prometheus & grafana.
 
@@ -21,6 +21,8 @@ Furthermore, if you are planning to develop and run the services locally you wil
 - CPUs: 8 Cores
 - Memory: 16 GB RAM
 - Disk: 32+ GB
+
+> At the moment, the content is geared towards Mac users.
 ## Set up local kind sandbox cluster
 
 Here we will provide a guide to set up your environment for local kubernetes development using [kind](https://kind.sigs.k8s.io/docs/user/quick-start). You are free to use [`minikube`](https://minikube.sigs.k8s.io/docs/start/) or [`Docker for Mac`](https://docs.docker.com/desktop/mac/install/), but I personally prefer kind as it is easier to get your local environment to reflect the the production environment and it is highly customizable.
